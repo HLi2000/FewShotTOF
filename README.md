@@ -2,6 +2,8 @@
 
 # Few-shot learning for highly accelerated 3D time-of-flight MRA reconstruction
 
+</div>
+
 ## Project Structure
 
 ```
@@ -53,8 +55,6 @@
 ├── setup.py                  <- File for installing project as a package
 └── README.md
 ```
-
-<br>
 
 ## 🚀  Quickstart
 
