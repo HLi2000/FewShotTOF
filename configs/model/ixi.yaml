@@ -1,0 +1,27 @@
+_target_: src.models.ixi_module.IXIModule
+
+is_3D: False
+calib: ${data.calib}
+espirit_kernel_width: 3
+lamda: 1e-6
+
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 0.0003  # Adam learning rate
+  weight_decay: 0.0  # weight regularization strength
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.StepLR
+  _partial_: true
+  step_size: 40  # epoch at which to decrease learning rate
+  gamma: 0.1  # extent to which to decrease learning rate
+
+net:
+  _target_: src.models.components.varnet.VarNet
+#  num_cascades : 12  # number of unrolled iterations
+#  pools: 4  # number of pooling layers for U-Net
+#  chans: 18  # number of top-level channels for U-Net
+#  sens_pools: 4  # number of pooling layers for sense est. U-Net
+#  sens_chans: 8  # number of top-level channels for sense est. U-Net
+#  is_3D: ${model.is_3D}

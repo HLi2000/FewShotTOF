@@ -1,0 +1,5 @@
+ixi_data_dir:
+ckpt_path:
+test_raw_dir:
+fastmri_ckpt_path:
+log_dir:

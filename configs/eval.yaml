@@ -1,0 +1,23 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - data: ixi.yaml # choose datamodule with `test_dataloader()` for evaluation
+  - model: ixi.yaml
+  - logger: null
+  - trainer: default.yaml
+  - paths: default.yaml
+  - extras: default.yaml
+  - hydra: default.yaml
+
+#  - experiment: null
+  - experiment: ixi_eval.yaml
+
+  - optional local: default.yaml
+
+task_name: "eval"
+
+tags: ["dev"]
+
+# passing checkpoint path is necessary for evaluation
+ckpt_path: ${local.ckpt_path}

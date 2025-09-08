@@ -1,0 +1,75 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: ixi.yaml
+  - override /model: ixi.yaml
+  - override /trainer: default.yaml
+  - override /paths: default.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+task_name: "eval_ixi"
+
+tags: ["ixi", "varnet"]
+
+seed: 2024
+
+paths:
+  log_dir: ${local.log_dir}
+
+prospective: False
+is_3D: True
+is_axial: False
+estimated_maps: False
+mask: 'poisson2d'
+#mask: 'poisson1d'
+#mask: 'equispaced'
+#mask: 'random1d'
+
+trainer:
+#  accelerator: cpu
+  accelerator: gpu
+  devices: 1
+#  devices: [0]
+#  log_every_n_steps: 1
+
+model:
+  prospective: ${prospective}
+  overlap: 0.3
+  is_3D: ${is_3D}
+  is_axial: ${is_axial}
+  estimated_maps: ${estimated_maps}
+  espirit_kernel_width: 3
+  lamda: 0.002
+  x_combine: 100
+  net:
+    _target_: src.models.components.varnet.VarNet
+    num_cascades: 12  # number of unrolled iterations 12
+    pools: 4  # number of pooling layers for U-Net 4
+    chans: 18  # number of top-level channels for U-Net 18
+    sens_pools: 4  # number of pooling layers for sense est. U-Net 4
+    sens_chans: 8  # number of top-level channels for sense est. U-Net 8
+    is_3D: ${is_3D}
+    is_axial: ${is_axial}
+    mask: ${mask}
+    shared_weights: False
+
+data:
+  estimated_maps: ${estimated_maps}
+  mask: ${mask}
+  acc_rate: 8.0
+  slope: 1000
+  batch_size: 1
+  num_workers: 0
+  calib: [12, 6]
+  resize: [256, 256]
+  num_compressed_coils: 8
+  partial_fourier: 0.
+  test_raw_dir: ${local.test_raw_dir}
+  prospective: ${prospective}
+
+ckpt_path: ${local.ckpt_path}
